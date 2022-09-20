@@ -3,16 +3,16 @@
     public class UploadedFileInfo
     {
         public string FileName { get; set; }
-        public string FileAccessString { get; set; }
+        public string AccessString { get; set; }
         public long FileSize { get; set; }
         public double ExpireTime { get; set; }
         public string DownloadLink { get; set; }
 
-        public UploadedFileInfo(string name, string fileAccessString)
+        public UploadedFileInfo(string name, string accessString)
         {
             FileName = name;
-            FileAccessString = fileAccessString;
-            DownloadLink = $"/api/download/{fileAccessString}";
+            AccessString = accessString;
+            DownloadLink = $"/api/download/{accessString}";
         }
 
         public UploadedFileInfo(DataBaseFileInfo dbInfo) : this(dbInfo.FileName, dbInfo.AccessString)

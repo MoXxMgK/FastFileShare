@@ -29,13 +29,14 @@ namespace FileShareApi.Controllers
 
             try
             {
-                var fileContent = System.IO.File.Open(file.StorageName, FileMode.Open);
+                var fileContent = FileStorage.GetFile(file.StorageName);
                 var fileContentType = "APPLICATION/file"; // TODO Get this from db or other ways
 
                 return File(fileContent, fileContentType, file.FileName);
             }
             catch (Exception ex) when (ex is FileNotFoundException || ex is IOException)
             {
+                System.Diagnostics.Debug.WriteLine(ex);
                 return BadRequest("Could not get file from server storage.");
             }
         }

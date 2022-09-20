@@ -7,6 +7,8 @@ namespace FileShareApi
     {
         public static void Main(string[] args)
         {
+            FileStorage.Init();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

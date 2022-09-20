@@ -8,6 +8,8 @@ namespace Company.WebApplication1
     {
         public static void Main(string[] args)
         {
+            FileSt
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

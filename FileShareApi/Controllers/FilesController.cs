@@ -32,7 +32,7 @@ namespace FileShareApi.Controllers
         }
 
         [HttpPost()]
-        public async Task<UploadedFileInfo> PostFileUpload(IFormFile file)
+        public async Task<UploadedFileInfo?> PostFileUpload(IFormFile file)
         {
             // TODO Check file size befor loading
             // TODO If file match all requirement, add file data to DB and return FileInfo Object
@@ -42,6 +42,7 @@ namespace FileShareApi.Controllers
 
             var f = await _ctx.CheckFile(fileChecksum);
 
+            // File already in database, return info
             if (f != null)
             {
                 return new UploadedFileInfo(f);
@@ -52,7 +53,14 @@ namespace FileShareApi.Controllers
             string storageName = Utils.GetRandomFileName(); // Now this is also access string
             double expireTime = TimeSpan.FromHours(1).TotalSeconds;  // Defautl exspireTime is 1 hour, get this from query
 
-            DataBaseFileInfo dbData = new DataBaseFileInfo(fileName, storageName, fileChecksum, storageName)
+            string? storagePath = await FileStorage.SaveFile(file, storageName);
+
+            if (storagePath == null)
+            {
+                return null;
+            }
+
+            DataBaseFileInfo dbData = new DataBaseFileInfo(fileName, storageName, fileChecksum, storagePath)
             {
                 FileSize = file.Length,
                 ExpireTime = expireTime
@@ -60,11 +68,6 @@ namespace FileShareApi.Controllers
 
             _ctx.Add(dbData);
             await _ctx.SaveChangesAsync();
-
-            using (var stream = System.IO.File.Create(storageName))
-            {
-                await file.CopyToAsync(stream);
-            }
 
             return new UploadedFileInfo(dbData);
         }
