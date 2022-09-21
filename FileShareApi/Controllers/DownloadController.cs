@@ -29,7 +29,7 @@ namespace FileShareApi.Controllers
 
             try
             {
-                var fileContent = FileStorage.GetFile(file.StorageName);
+                var fileContent = await FileStorage.GetFile(file.StorageName);
                 var fileContentType = "APPLICATION/file"; // TODO Get this from db or other ways
 
                 return File(fileContent, fileContentType, file.FileName);

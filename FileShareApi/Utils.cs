@@ -12,5 +12,13 @@
         {
             return 0;
         }
+
+        public static double ClampExpireTime(double lifeTime)
+        {
+            double min = TimeSpan.FromHours(1).TotalSeconds;
+            double max = TimeSpan.FromHours(24).TotalSeconds;
+
+            return Math.Clamp(lifeTime, min, max);
+        }
     }
 }

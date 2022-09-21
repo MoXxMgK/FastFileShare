@@ -1,7 +1,10 @@
-﻿namespace FileShareApi
+﻿using System.IO.Compression;
+
+namespace FileShareApi
 {
     public static class FileStorage
     {
+        // TODO Creame methoods for file compression
         public static string StorageFolder { get; set; } = "Files";
 
         public static void Init()
@@ -31,13 +34,18 @@
             }
             catch (Exception ex) when (ex is FileNotFoundException || ex is IOException)
             {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine(ex);
+#endif
                 return null;
             }
         }
 
-        public static Stream GetFile(string filePath)
+        public static async Task<Stream> GetFile(string filePath)
         {
-            return File.Open(filePath, FileMode.Open);
+            Stream fs = File.Open(filePath, FileMode.Open);
+
+            return await Task.FromResult(fs);
         }
     }
 }
